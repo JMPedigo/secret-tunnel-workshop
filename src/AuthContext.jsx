@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
       const response = await fetch(API + "/authenticate", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!response.success) throw Error("Authentification failed.");
+      if (!response.ok) throw Error("Authentification failed.");
       setLocation("TUNNEL");
     } catch (e) {
       console.error(e);
