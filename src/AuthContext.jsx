@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
   const [location, setLocation] = useState("GATE");
 
   // TODO: signup
-  async function signup(userInfo) {
+  const signup = async (userInfo) => {
     try {
       const response = await fetch(API + "/signup", {
         method: "POST",
@@ -22,10 +22,21 @@ export function AuthProvider({ children }) {
     } catch (e) {
       console.error(e);
     }
-  }
-  // TODO: authenticate
+  };
+  const authenticate = async () => {
+    try {
+      if (!token) throw Error("No token found.");
+      const response = await fetch(API + "/authenticate", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.success) throw Error("Authentification failed.");
+      setLocation("TUNNEL");
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
-  const value = { signup, location };
+  const value = { signup, location, authenticate };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
